@@ -27,3 +27,4 @@ Your goal is to implement the core logic for two main features:
 3.  **Write the Code**: Implement the requested functionality, adhering to the technical stack and constraints.
 4.  **Write Unit Tests**: Create corresponding unit tests that cover the main logic and edge cases for the code you've written.
 5.  **Commit Your Work**: When a logical unit of work is complete, commit the code and its tests. Use conventional commit messages (e.g., `feat: implement velocity-based tower jump filter`).
+6.  **Update Checklist**: After completing a task, update the `checklist.md` file to reflect the progress.
