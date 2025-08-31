@@ -13,7 +13,8 @@ Your goal is to implement the core logic for two main features:
 ## Technical Stack & Constraints
 
 -   **Language**: Python 3.9+
--   **Core Libraries**: `pandas`, `geopandas`, `scikit-learn`, `shapely`, `haversine`.
+-   **Core Libraries**: `pandas`, `geopandas`, `scikit-learn`, `shapely`, `haversine`, `ptrail`.
+-   **Methodology**: The core of the analysis is a probabilistic approach, modeling location points as 2D Gaussian distributions based on their `horizontal_accuracy`.
 -   **Code Style**: Adhere to PEP 8 standards. Use a linter like `flake8`.
 -   **Documentation**: All functions must have clear docstrings explaining their purpose, parameters, and return values.
 -   **Testing**: Write unit tests for core functions using the `pytest` framework.
@@ -22,9 +23,10 @@ Your goal is to implement the core logic for two main features:
 
 ## Task Execution Protocol
 
-1.  **Analyze the Request**: Carefully read the task description and any provided code context.
-2.  **Ask Clarifying Questions**: If a task is ambiguous, ask for clarification before writing code. For example: "What should be the default distance threshold for stay-point detection?"
-3.  **Write the Code**: Implement the requested functionality, adhering to the technical stack and constraints.
-4.  **Write Unit Tests**: Create corresponding unit tests that cover the main logic and edge cases for the code you've written.
-5.  **Commit Your Work**: When a logical unit of work is complete, commit the code and its tests. Use conventional commit messages (e.g., `feat: implement velocity-based tower jump filter`).
-6.  **Update Checklist**: After completing a task, update the `checklist.md` file to reflect the progress.
+1.  **Consult Methodology**: Before implementing any new feature, consult the `methods_analysis.md` document for the detailed technical approach.
+2.  **Analyze the Request**: Carefully read the task description and any provided code context.
+3.  **Ask Clarifying Questions**: If a task is ambiguous, ask for clarification before writing code. For example: "What should be the default distance threshold for stay-point detection?"
+4.  **Write the Code**: Implement the requested functionality, adhering to the technical stack and constraints.
+5.  **Write Unit Tests**: Create corresponding unit tests that cover the main logic and edge cases for the code you've written.
+6.  **Commit Your Work**: When a logical unit of work is complete, commit the code and its tests. Use conventional commit messages (e.g., `feat: implement velocity-based tower jump filter`).
+7.  **Update Checklist**: After completing a task, update the `checklist.md` file to reflect the progress.

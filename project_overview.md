@@ -32,6 +32,72 @@ We process location data from two sources, which are combined into a single, sta
 -   **Example**: A user drives from their home in CT to JFK airport in NY. The entire drive through NY to the airport should be marked as "transit."
 -   **Success Criterion**: Correctly label segments of the user's trajectory as "transit" and assign a confidence score.
 
-## 4. Expected Output
+## 5. Technical Approach
 
-For each user, the final output will be a labeled set of trajectory points and aggregated time segments, indicating whether each point/segment is a "Tower Jump" or "Transit."
+The project will be implemented in Python, leveraging a probabilistic approach to handle the inherent uncertainty in location data. The core of the methodology is to model each location point not as a fixed coordinate, but as a 2D Gaussian probability distribution based on its `horizontal_accuracy`.
+
+Key libraries and technologies include:
+-   **Data Handling and Preprocessing**: `ptrail`, `pandas`, `geopandas`
+-   **Geospatial Analysis**: `shapely`, `haversine`
+-   **Machine Learning (for clustering/classification)**: `scikit-learn`
+
+The analysis will be conducted in the following phases:
+1.  **Preprocessing**: Raw data will be cleaned, structured, and enriched using the `ptrail` library. This includes noise filtering, trajectory segmentation, and feature engineering.
+2.  **Probabilistic Modeling**: Each location point will be modeled as a 2D Gaussian distribution.
+3.  **Tower Jump Detection**: Uses an "impossible travel" paradigm, calculating the probability that the velocity between two points exceeds a plausible maximum. A multi-factor confidence score will be generated.
+4.  **Stay Point Detection**: A probabilistic version of the DBSCAN clustering algorithm will be used to identify significant locations (stay points).
+5.  **Transit Detection**: Transit segments will be identified as the travel between stay points, with a confidence score based on the certainty of the origin and destination, as well as the coherence of the path.
+
+## 6. Expected Output
+
+The final output will consist of two main deliverables:
+
+### 6.1. Point-Level Flagged Output
+
+A detailed, point-level dataset with the following schema:
+
+| Column Name                 | Data Type       | Description                                                                                                                                      |
+| --------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | 
+| `point_id`                  | `UUID`          | A unique identifier for each location record.                                                                                                    |
+| `user_id`                   | `String`        | A unique identifier for the user or device.                                                                                                      |
+| `timestamp_utc`             | `Timestamp (UTC)` | The timestamp of the location ping.                                                                                                              |
+| `latitude`                  | `Float`         | The WGS84 latitude of the reported location.                                                                                                     |
+| `longitude`                 | `Float`         | The WGS84 longitude of the reported location.                                                                                                    |
+| `horizontal_accuracy_m`     | `Float`         | The horizontal accuracy radius in meters.                                                                                                        |
+| `original_source`           | `Enum`          | The source of the data: 'carrier' or 'app'.                                                                                                      |
+| `trajectory_id`             | `UUID`          | Identifier for the trajectory this point belongs to.                                                                                             |
+| `point_type`                | `Enum`          | The classification of the point. Values: `stay_point`, `transit_point`, `tower_jump_origin`, `tower_jump_terminus`, `unobserved_transit_origin`, `unobserved_transit_terminus`, `gross_error` |
+| `event_id`                  | `UUID`          | A unique ID linking all points in a single event (a specific stay, transit, or jump). Null if not part of an event.                                  |
+| `confidence_score`          | `Float`         | The confidence score associated with the event this point belongs to.                                                                            |
+
+### 6.2. Aggregated Location Report
+
+A higher-level summary of mobility patterns, consisting of two tables:
+
+**Stay Points Summary Table**
+
+| Column Name                   | Data Type       | Description                                                                                             |
+| ----------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `user_id`                     | `String`        | The unique identifier for the user.                                                                     |
+| `stay_point_id`               | `UUID`          | The unique identifier for this specific stay point (corresponds to `event_id`).                         |
+| `centroid_latitude`           | `Float`         | The latitude of the calculated U-centroid for the stay point.                                           |
+| `centroid_longitude`          | `Float`         | The longitude of the calculated U-centroid for the stay point.                                          |
+| `centroid_uncertainty_radius` | `Float`         | The uncertainty radius (in meters) of the U-centroid, reflecting the aggregate uncertainty of the cluster. |
+| `total_visits`                | `Integer`       | The total number of times this stay point was visited in the reporting period.                          |
+| `avg_duration_seconds`        | `Float`         | The average duration of a visit to this stay point, in seconds.                                         |
+| `median_duration_seconds`     | `Float`         | The median duration of a visit to this stay point, in seconds.                                          |
+| `first_seen`                  | `Timestamp (UTC)` | The timestamp of the first recorded visit to this stay point.                                           |
+| `last_seen`                   | `Timestamp (UTC)` | The timestamp of the most recent recorded visit to this stay point.                                     |
+
+**Transit Summary Table**
+
+| Column Name                 | Data Type       | Description                                                                                             |
+| --------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `user_id`                   | `String`        | The unique identifier for the user.                                                                     |
+| `transit_corridor_id`       | `UUID`          | A unique identifier for the corridor, defined by the origin-destination pair.                           |
+| `origin_stay_point_id`      | `UUID`          | The ID of the origin stay point (foreign key to Stay Points table).                                     |
+| `destination_stay_point_id` | `UUID`          | The ID of the destination stay point (foreign key to Stay Points table).                                |
+| `total_trips`               | `Integer`       | The total number of observed trips along this corridor in the reporting period.                         |
+| `avg_transit_time_seconds`  | `Float`         | The average duration of a trip along this corridor, in seconds.                                         |
+| `median_transit_time_seconds` | `Float`         | The median duration of a trip along this corridor, in seconds.                                          |
+| `avg_directness_score`      | `Float`         | The average spatial cohesion score for trips along this corridor.                                       |
