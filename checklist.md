@@ -1,4 +1,4 @@
-# Project Development Checklist
+yes sure# Project Development Checklist
 
 This checklist tracks the development of the Tower Jump and Transit Detection project. It is structured to first create a minimal working example, and then to iteratively add more advanced features in a `dev` branch.
 
@@ -25,7 +25,7 @@ This phase establishes a clean, organized, and ready-to-use repository structure
 
 This phase focuses on creating a simple, end-to-end version of the analysis pipeline using the provided test data.
 
--   [ ] **Task 3: Implement Basic Preprocessing**
+-   [x] **Task 3: Implement Basic Preprocessing**
     -   [x] Create `src/data_models.py`.
     -   [x] Implement `load_and_standardize_data` function.
     -   [x] Add basic noise filtering.
