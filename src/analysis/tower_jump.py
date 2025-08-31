@@ -1,4 +1,4 @@
-from ptrail.ptrail.trajectory import PTRAILDataFrame
+from ptrail.core.TrajectoryDF import PTRAILDataFrame
 from ptrail.features.kinematic_features import KinematicFeatures
 
 def detect_tower_jumps(pdf: PTRAILDataFrame, speed_threshold: float = 45.0) -> PTRAILDataFrame:
@@ -14,7 +14,7 @@ def detect_tower_jumps(pdf: PTRAILDataFrame, speed_threshold: float = 45.0) -> P
     # Calculate kinematic features, including speed.
     kinematic_features_df = KinematicFeatures.generate_kinematic_features(pdf)
 
-    # Identify tower jumps based on the speed threshold.
-    kinematic_features_df['is_tower_jump'] = kinematic_features_df['Speed'] > speed_threshold
+    # Identify tower jumps based on the speed threshold and shift the result up.
+    kinematic_features_df['is_tower_jump'] = (kinematic_features_df['Speed'] > speed_threshold).shift(-1).fillna(False)
 
     return kinematic_features_df

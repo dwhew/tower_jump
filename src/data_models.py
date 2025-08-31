@@ -1,7 +1,7 @@
 import geopandas as gpd
 import pandas as pd
 from ptrail.preprocessing.filters import Filters
-from ptrail.trajectory import PTRAILDataFrame
+from ptrail.core.TrajectoryDF import PTRAILDataFrame
 
 def load_and_standardize_data(file_path: str) -> PTRAILDataFrame:
     """Loads raw data, standardizes columns, filters noise, and returns a PTRAILDataFrame.

@@ -1,7 +1,12 @@
-
+import sys
+import os
 import pandas as pd
 import numpy as np
-from ptrail.ptrail.trajectory import PTRAILDataFrame
+from ptrail.core.TrajectoryDF import PTRAILDataFrame
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.analysis.tower_jump import detect_tower_jumps
 
 def test_detect_tower_jumps():
