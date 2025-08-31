@@ -1,5 +1,6 @@
 import argparse
 from src.data_models import load_and_standardize_data
+from src.analysis.tower_jump import detect_tower_jumps
 
 def main():
     """Main function to run the location trajectory analysis."""
@@ -11,11 +12,16 @@ def main():
     print(f"Loading and standardizing data from {args.input}...")
     gdf = load_and_standardize_data(args.input)
 
-    # Placeholder for analysis functions
-    print("Analyzing data for tower jumps and transit periods...")
+    print("Detecting tower jumps...")
+    gdf_with_jumps = detect_tower_jumps(gdf)
 
-    # Placeholder for saving results
+    # Placeholder for transit detection
+    print("Analyzing data for transit periods...")
+
     print(f"Saving processed data to {args.output}...")
+    gdf_with_jumps.to_csv(args.output, index=False)
+
+    print("Processing complete.")
 
 if __name__ == "__main__":
     main()
