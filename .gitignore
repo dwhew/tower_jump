@@ -116,3 +116,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Ignore all markdown files except README.md
+*.md
+!README.md
