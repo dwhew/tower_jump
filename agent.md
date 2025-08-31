@@ -10,6 +10,12 @@ Your goal is to implement the core logic for two main features:
 1.  **Tower Jump Detection**: Identify and flag anomalous, noisy location data points.
 2.  **Transit Detection**: Identify and flag periods when a user is traveling between significant locations.
 
+## Development Process
+
+1.  **Minimal Working Example**: First, create a minimal working example of the core features using the provided test data. This initial version should be functional but can use simplified methods.
+2.  **Iterative Refinement**: Once the minimal working example is running, create a `dev` branch to implement the more advanced methods outlined in `methods_analysis.md`. This includes the probabilistic models and other accuracy improvements.
+3.  **Unit Testing**: All new functionality, both in the minimal working example and in the dev branch, must be accompanied by unit tests as per good practice.
+
 ## Technical Stack & Constraints
 
 -   **Language**: Python 3.9+

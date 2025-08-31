@@ -34,6 +34,8 @@ We process location data from two sources, which are combined into a single, sta
 
 ## 5. Technical Approach
 
+The project will be developed iteratively, starting with a minimal working example (MWE) to establish a baseline. The MWE will use simplified algorithms to provide an end-to-end working pipeline. Following the MWE, more advanced features and the full probabilistic methodology will be implemented in a separate `dev` branch.
+
 The project will be implemented in Python, leveraging a probabilistic approach to handle the inherent uncertainty in location data. The core of the methodology is to model each location point not as a fixed coordinate, but as a 2D Gaussian probability distribution based on its `horizontal_accuracy`.
 
 Key libraries and technologies include:
