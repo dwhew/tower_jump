@@ -1,0 +1,7 @@
+pandas
+geopandas
+haversine
+scikit-learn
+pytest
+flake8
+shapely
