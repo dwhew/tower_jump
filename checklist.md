@@ -31,7 +31,7 @@ This phase focuses on creating a simple, end-to-end version of the analysis pipe
     -   [x] Add basic noise filtering.
 
 -   [ ] **Task 4: Implement Baseline Analysis**
-    -   [ ] Implement a simple tower jump detection algorithm (e.g., based on a fixed speed threshold).
+    -   [x] Implement a simple tower jump detection algorithm (e.g., based on a fixed speed threshold).
     -   [ ] Implement a simple stay-point detection algorithm (e.g., based on fixed distance and time thresholds).
     -   [ ] Implement basic transit detection between stay-points.
 
