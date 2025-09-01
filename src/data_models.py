@@ -1,25 +1,27 @@
 import geopandas as gpd
 import pandas as pd
-from ptrail.core.TrajectoryDF import PTRAILDataFrame
-import pandas as pd
+from shapely.geometry import Point
 
-def load_and_standardize_data(file_path: str) -> PTRAILDataFrame:
-    """Loads raw data and standardizes it into a PTRAILDataFrame.
+def load_and_standardize_data(file_path: str) -> gpd.GeoDataFrame:
+    """Loads raw data and standardizes it into a GeoDataFrame.
 
     Args:
         file_path: The path to the raw data file.
 
     Returns:
-        A PTRAILDataFrame with standardized data.
+        A GeoDataFrame with standardized data.
     """
     # Read the raw CSV data.
     df = pd.read_csv(file_path)
 
-    # Create a PTRAILDataFrame.
-    pdf = PTRAILDataFrame(df,
-                            latitude='latitude',
-                            longitude='longitude',
-                            datetime='timestamp_utc',
-                            traj_id='user_id')
+    # Drop rows with missing Latitude, Longitude, or UTCDateTime
+    df.dropna(subset=['Latitude', 'Longitude', 'UTCDateTime'], inplace=True)
 
-    return pdf
+    # Create a GeoDataFrame.
+    geometry = [Point(xy) for xy in zip(df['Longitude'], df['Latitude'])]
+    gdf = gpd.GeoDataFrame(df, geometry=geometry, crs="EPSG:4326")
+
+    # Ensure timestamp column is datetime objects
+    gdf['timestamp'] = pd.to_datetime(gdf['UTCDateTime'])
+
+    return gdf
