@@ -1,6 +1,7 @@
 import argparse
+import pandas as pd
 from src.data_models import load_and_standardize_data
-from src.analysis.tower_jump import detect_tower_jumps, find_stay_points
+from src.analysis.tower_jump import detect_tower_jumps
 from src.visualization.map_visualization import create_tower_jump_map
 
 def main():
@@ -14,28 +15,18 @@ def main():
     print(f"Loading and standardizing data from {args.input}...")
     gdf = load_and_standardize_data(args.input)
 
-    # print("Detecting tower jumps...")
-    # gdf_with_jumps = detect_tower_jumps(gdf)
-
-    print(f"Loading and standardizing data from {args.input}...")
-    gdf = load_and_standardize_data(args.input)
-
-    # print("Detecting tower jumps...")
-    # gdf_with_jumps = detect_tower_jumps(gdf) # This is commented out due to ptrail compatibility issues
-
-    print("Detecting stay points...")
-    stay_points = find_stay_points(gdf)
-    print(f"Detected {len(stay_points)} stay points: {stay_points}")
+    print("Detecting tower jumps...")
+    gdf_with_jumps = detect_tower_jumps(gdf)
 
     # Placeholder for transit detection
     print("Analyzing data for transit periods...")
 
     if args.map_output:
         print(f"Creating and saving map to {args.map_output}...")
-        create_tower_jump_map(gdf, args.map_output) # Use gdf directly
+        create_tower_jump_map(gdf_with_jumps, args.map_output)
 
     print(f"Saving processed data to {args.output}...")
-    gdf.to_csv(args.output, index=False) # Use gdf directly
+    gdf_with_jumps.to_csv(args.output, index=False)
 
     print("Processing complete.")
 

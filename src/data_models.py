@@ -21,7 +21,10 @@ def load_and_standardize_data(file_path: str) -> gpd.GeoDataFrame:
     geometry = [Point(xy) for xy in zip(df['Longitude'], df['Latitude'])]
     gdf = gpd.GeoDataFrame(df, geometry=geometry, crs="EPSG:4326")
 
+    # Rename columns to standardize
+    gdf = gdf.rename(columns={'Latitude': 'latitude', 'Longitude': 'longitude', 'UTCDateTime': 'timestamp_utc'})
+
     # Ensure timestamp column is datetime objects
-    gdf['timestamp'] = pd.to_datetime(gdf['UTCDateTime'])
+    gdf['timestamp_utc'] = pd.to_datetime(gdf['timestamp_utc'])
 
     return gdf
