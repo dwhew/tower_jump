@@ -23,20 +23,14 @@ def detect_tower_jumps(gdf: gpd.GeoDataFrame, speed_threshold: float = 45.0) -> 
         actual_dist_meters = geodesic((p1.geometry.y, p1.geometry.x),
                                       (p2.geometry.y, p2.geometry.x)).meters
 
-        time_diff_seconds = (p2.timestamp - p1.timestamp).total_seconds()
+        time_diff_seconds = (p2.timestamp_utc - p1.timestamp_utc).total_seconds()
 
         if time_diff_seconds > 0:
             actual_speed_mps = actual_dist_meters / time_diff_seconds
 
-            accuracy_p1 = p1['horizontal_accuracy_m'] \
-                if 'horizontal_accuracy_m' in p1 else 0
-            accuracy_p2 = p2['horizontal_accuracy_m'] \
-                if 'horizontal_accuracy_m' in p2 else 0
-
-            # Flag if speed is high and distance is implausible given accuracy
-            if actual_speed_mps > speed_threshold and \
-                    actual_dist_meters > (accuracy_p1 + accuracy_p2):
-                gdf.at[i, 'is_tower_jump'] = True
+            # Flag if speed is high
+            if actual_speed_mps > speed_threshold:
+                gdf.iloc[i, gdf.columns.get_loc('is_tower_jump')] = True
 
     return gdf
 
@@ -71,7 +65,7 @@ def find_stay_points(
                 break
 
         if j - i > 1 and \
-                (gdf.iloc[j-1].timestamp - gdf.iloc[i].timestamp) >= time_threshold:
+                (gdf.iloc[j-1].timestamp_utc - gdf.iloc[i].timestamp_utc) >= time_threshold:
             stay_points.append((i, j - 1))
         i = j
 

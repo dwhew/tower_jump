@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 *.so
 
+.vscode/
+
 # Distribution / packaging
 .Python
 build/
@@ -120,3 +122,7 @@ cython_debug/
 # Ignore all markdown files except README.md
 *.md
 !README.md
+
+# Test outputs
+test_map.html
+test_out.csv

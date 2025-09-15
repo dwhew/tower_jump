@@ -16,6 +16,8 @@ def load_and_standardize_data(file_path: str) -> gpd.GeoDataFrame:
 
     # Drop rows with missing Latitude, Longitude, or UTCDateTime
     df.dropna(subset=['Latitude', 'Longitude', 'UTCDateTime'], inplace=True)
+    #drop geometry if 0,0
+    df = df[~((df['Latitude'] == 0) & (df['Longitude'] == 0))]
 
     # Create a GeoDataFrame.
     geometry = [Point(xy) for xy in zip(df['Longitude'], df['Latitude'])]

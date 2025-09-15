@@ -15,6 +15,10 @@ def create_tower_jump_map(df: pd.DataFrame, output_path: str):
     # Add the trajectory as a line.
     points = df[['latitude', 'longitude']].values.tolist()
     folium.PolyLine(points, color='blue', weight=2.5, opacity=1).add_to(m)
+    
+    # Add trajectory of non-tower-jump points as a line
+    non_jump_points = df[~df['is_tower_jump']][['latitude', 'longitude']].values.tolist()
+    folium.PolyLine(non_jump_points, color='green', weight=2.5).add_to(m)
 
     # Add markers for tower jumps.
     tower_jumps = df[df['is_tower_jump']]
@@ -28,6 +32,9 @@ def create_tower_jump_map(df: pd.DataFrame, output_path: str):
             fill_opacity=0.7,
             popup=f"Tower Jump\nTimestamp: {row['timestamp_utc']}"
         ).add_to(m)
+
+    # add UI controls to toggle tower jump layer
+    folium.LayerControl().add_to(m)
 
     # Save the map to an HTML file.
     m.save(output_path)

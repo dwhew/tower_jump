@@ -1,4 +1,4 @@
-pandas==1.5.3
+pandas
 geopandas
 haversine
 scikit-learn
@@ -6,3 +6,5 @@ pytest
 flake8
 shapely
 ptrail
+geopy
+IPython==7.34.0
